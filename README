@@ -1,0 +1,43 @@
+Anton Petrov
+cs445
+SVD
+
+Structure of code
+-----------------
+	The files main.c, getLine.c and getLine.h are all scaffolding code in the
+sense that they provide inputs and support to the jacobi function. Use my
+makefile to compile the code with the command 'make all'. This forces fresh
+compilation by deleting the previous executable and any files containing
+matrices. The executable is called 'jacobi'. If you provide with one non
+null argument it will generate the matrices required in the problem set
+in different files in the current directory.
+	The input matrix is read in main.c from a file called input-matrix.txt
+The first line of that file contains the dimension of the matrix and each
+subsequent line contains a row of the matrix where each element is separated
+with a tab character. The getLine function was stolen from Professor Eisenstat.
+The .h files are required to contain the function declarations and the .c files
+contain the implementation of those functions.
+
+Algorithm
+----------
+
+	The jacobi function implements the Jacobi algorithm for producing the
+SVD of a non-symmetric matrix. It does so by applying orthogonal rotation
+matrices to each side of the input matrix until all off-diagonal elements
+have been zeroed out. The matrix applied to the left is denoted by Ui and
+the matrix applied to the right Vi. The function keeps track of these rotations
+by multiplying each rotation matrix to produce the final U and V. At the
+end of the algorithm the matrix S has all singular values along its diagonal
+in decreasing order.
+	My implementation selects the largest off-diagonal element of A,
+constructs the corresponsing 2x2 matrix to which it applies the rotation.
+The rotation angles are calculated using the following closed form formula:
+
+X = atan ((a21 - a12) / (a11 + a22))
+Y = atan ((a21 + a12) / (a11 - a22))
+
+alpha = 0.5 * (X + Y)
+beta = 0.5 * (Y - X)
+
+	where alpha and beta are the rotation angle of the left and right
+orthogonal rotation matrices, respectively.
